@@ -12,11 +12,23 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import useResponsiveStyles from "../hooks/useResponsiveStyles";
+import MenuBar from "../components/MenuBar";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
 
 export default function GameUi() {
   const { isMobile, isTablet, isDesktop } = useResponsiveStyles();
+  const [menuVisible, setMenuVisible] = React.useState(false);
+
+  const handleShowMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
+  const handleHideMenu = () => {
+    setMenuVisible(false);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0A2040" }}>
       <StatusBar barStyle="light-content" />
@@ -33,8 +45,12 @@ export default function GameUi() {
             <Text style={styles.count}>10</Text>
           </View>
         </TouchableOpacity>
-        <Text style={styles.menu}>≡</Text>
+        <TouchableOpacity style={styles.menu} onPress={handleShowMenu}>
+          <MaterialIcons name="menu" size={24} color="#fff" />
+        </TouchableOpacity>
       </View>
+
+      <MenuBar open={menuVisible} onPress={handleHideMenu} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[
@@ -45,11 +61,18 @@ export default function GameUi() {
         contentContainerStyle={[
           isMobile && styles.content,
           isTablet && styles.contentTablet,
-          isDesktop && styles.contentDesktop,]}
+          isDesktop && styles.contentDesktop,
+        ]}
         horizontal={isDesktop}
         nestedScrollEnabled={isDesktop}
       >
-        <View style={[isMobile && styles.playerRow, isTablet && styles.playerRowTablet, isDesktop && styles.playerRowDesktop]}>
+        <View
+          style={[
+            isMobile && styles.playerRow,
+            isTablet && styles.playerRowTablet,
+            isDesktop && styles.playerRowDesktop,
+          ]}
+        >
           <Image
             style={styles.avatar}
             source={{
@@ -127,10 +150,27 @@ export default function GameUi() {
                   isDesktop && styles.cell2Desktop,
                 ]}
               >
-                <View style={[styles.dotTop , isDesktop && styles.dotTopDesktop]} />
-                <View style={[styles.dotBottom, isDesktop && styles.dotBottomDesktop]} />
-                <View style={[styles.dotTopRight,isDesktop && styles.dotTopRightDesktop]} />
-                <View style={[styles.dotBottomRight,isDesktop && styles.dotBottomRightDesktop]} />
+                <View
+                  style={[styles.dotTop, isDesktop && styles.dotTopDesktop]}
+                />
+                <View
+                  style={[
+                    styles.dotBottom,
+                    isDesktop && styles.dotBottomDesktop,
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.dotTopRight,
+                    isDesktop && styles.dotTopRightDesktop,
+                  ]}
+                />
+                <View
+                  style={[
+                    styles.dotBottomRight,
+                    isDesktop && styles.dotBottomRightDesktop,
+                  ]}
+                />
               </View>
             </View>
           </View>
@@ -165,12 +205,22 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingHorizontal: 30,
     backgroundColor: "#0A2040",
-    flexDirection:"row",
-    gap:16
+    flexDirection: "row",
+    gap: 16,
   },
-  content: { flexGrow: 1 ,gap:4},
-  contentTablet: { flexGrow: 1 ,gap:16,justifyContent:"space-between",alignItems:"center"},
-  contentDesktop: { flexGrow: 1 ,gap:16,justifyContent:"space-between",alignItems:"center"},
+  content: { flexGrow: 1, gap: 4 },
+  contentTablet: {
+    flexGrow: 1,
+    gap: 16,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  contentDesktop: {
+    flexGrow: 1,
+    gap: 16,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -179,9 +229,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerTablet: {
+    width: "90%",
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,
+    alignSelf:"center",
     alignItems: "center",
   },
   headerDesktop: {
@@ -270,8 +322,8 @@ const styles = StyleSheet.create({
     height: width * 0.4,
     aspectRatio: 1,
     marginTop: 8,
-    minWidth:600,
-    minHeight:600,
+    minWidth: 600,
+    minHeight: 600,
     backgroundColor: "#123362",
     borderRadius: 8,
     justifyContent: "center",
@@ -312,8 +364,8 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     maxHeight: 70,
     maxWidth: 70,
-    minHeight:60,
-    minWidth:60,
+    minHeight: 60,
+    minWidth: 60,
     borderStyle: "dashed",
     borderWidth: 1,
     borderColor: "gray",
@@ -321,8 +373,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cellDesktop: {
-    width: width * 0.10,
-    height: width * 0.10,
+    width: width * 0.1,
+    height: width * 0.1,
     aspectRatio: 1,
     maxHeight: 90,
     maxWidth: 90,
@@ -394,7 +446,7 @@ const styles = StyleSheet.create({
     maxHeight: 20,
     maxWidth: 20,
   },
-  dotTopRightDesktop:{
+  dotTopRightDesktop: {
     width: width * 0.025,
     height: width * 0.025,
     right: "-10%",
@@ -455,17 +507,18 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   footerTablet: {
+    width:"90%",
     marginTop: 30,
     flexDirection: "row",
     justifyContent: "flex-end",
   },
   footerDesktop: {
-    alignSelf:"flex-end",
+    alignSelf: "flex-end",
     marginVertical: 30,
     flexDirection: "column",
     justifyContent: "flex-start",
     alignContent: "flex-start",
-    flexDirection:"column-reverse",
+    flexDirection: "column-reverse",
     gap: 10,
   },
   timerBox: {
@@ -483,7 +536,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    flex:1,
+    flex: 1,
     paddingVertical: 8,
     borderRadius: 8,
     marginRight: 12,

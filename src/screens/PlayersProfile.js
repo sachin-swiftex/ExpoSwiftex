@@ -10,6 +10,8 @@ import {
 import { FontAwesome } from "@expo/vector-icons";
 import useResponsiveStyles from "../hooks/useResponsiveStyles";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 const DATA = [
   { id: 1, name: "player 1", color: "#D9534F" },
@@ -22,8 +24,13 @@ const DATA = [
 ];
 
 const PlayerItem = ({ item }) => {
+  const { isMobile, isTablet, isDesktop } = useResponsiveStyles();
+  const navigation = useNavigation()
+  const handleNavigate = ()=>{
+    navigation.navigate("GameUi")
+  }
   return (
-    <TouchableOpacity style={styles.playerBox}>
+    <TouchableOpacity style={styles.playerBox} onPress={handleNavigate}>
       <View style={styles.left}>
         <View style={styles.avatarBox}>
           <FontAwesome name="user" size={40} color="white" />
@@ -44,33 +51,59 @@ const PlayerItem = ({ item }) => {
 export default function PlayersProfile() {
   const { isMobile, isTablet, isDesktop } = useResponsiveStyles();
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
-      <Text style={styles.header}>PLAYERS PROFILE</Text>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#062246" }}>
+      <View
+        style={[
+          isMobile && styles.container,
+          isDesktop && styles.containerDesktop,
+          isTablet && styles.containerTablet,
+        ]}
+      >
+        <StatusBar style="light" />
+        <Text style={styles.header}>PLAYERS PROFILE</Text>
 
-      <View style={styles.activeBox}>
-        <Text style={styles.activeText}>Active Player’s : {DATA.length}</Text>
+        <View style={styles.activeBox}>
+          <Text style={styles.activeText}>Active Player’s : {DATA.length}</Text>
+        </View>
+
+        <FlatList
+          data={DATA}
+          nestedScrollEnabled={true}
+          renderItem={({ item }) => <PlayerItem item={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ paddingBottom: 150 }}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
-
-      <FlatList
-        data={DATA}
-        nestedScrollEnabled={true}
-        renderItem={({ item }) => <PlayerItem item={item} />}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={{ paddingBottom: 150 }}
-        showsVerticalScrollIndicator={false}
-      />
-   
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    width:"100%",
     flex: 1,
     backgroundColor: "#062246",
-    paddingTop: 60,
-    paddingHorizontal:16,
+    paddingTop: 20,
+    alignSelf:"center",
+    paddingHorizontal: 16,
+  },
+  containerTablet: {
+    width: "90%",
+    flex: 1,
+    backgroundColor: "#062246",
+    paddingTop: 40,
+    alignSelf:"center",
+    paddingHorizontal: 16,
+  },
+
+  containerDesktop: {
+    width: "60%",
+    flex: 1,
+    backgroundColor: "#062246",
+    paddingTop: 40,
+    alignSelf:"center",
+    paddingHorizontal: 16,
   },
 
   header: {

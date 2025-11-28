@@ -1,10 +1,7 @@
-import React from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
-  Platform,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5, MaterialIcons, Entypo } from "@expo/vector-icons";
@@ -14,15 +11,21 @@ import TransactionsScreen from "../screens/PlayersProfile";
 import PayoutsScreen from "../screens/PlayersProfile";
 import ShopScreen from "../screens/PlayersProfile";
 import SettingsScreen from "../screens/PlayersProfile";
+import useResponsiveStyles from "../hooks/useResponsiveStyles";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabs() {
+  const { isMobile, isTablet, isDesktop } = useResponsiveStyles();
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: isMobile
+          ? styles.tabBar
+          : isTablet
+            ? styles.tabBarTablet
+            : styles.tabBarDesktop,
         tabBarShowLabel: false,
       }}
     >
@@ -38,7 +41,10 @@ export default function BottomTabs() {
                 size={24}
                 color={focused ? "#ffcc66" : "white"}
               />
-              <Text style={[styles.label, focused && styles.activeLabel]} numberOfLines={1} >
+              <Text
+                style={[styles.label, focused && styles.activeLabel]}
+                numberOfLines={1}
+              >
                 Transactions
               </Text>
             </View>
@@ -58,7 +64,10 @@ export default function BottomTabs() {
                 size={23}
                 color={focused ? "#ffcc66" : "white"}
               />
-              <Text style={[styles.label, focused && styles.activeLabel]} numberOfLines={1}>
+              <Text
+                style={[styles.label, focused && styles.activeLabel]}
+                numberOfLines={1}
+              >
                 Payouts
               </Text>
             </View>
@@ -73,16 +82,16 @@ export default function BottomTabs() {
         options={{
           tabBarIcon: ({ focused }) => (
             <View style={styles.centerWrapper}>
-             
-                <View style={styles.homeCircle} />
-                <View style={[styles.homeCircleInner]} >
+              <View style={styles.homeCircle} />
+              <View style={[styles.homeCircleInner]}>
                 <FontAwesome5
                   name="home"
                   size={26}
                   color={focused ? "#dfc27d" : "white"}
                 />
                 <Text
-                  style={[styles.labelCenter, focused && { color: "#dfc27d" }]} numberOfLines={1}
+                  style={[styles.labelCenter, focused && { color: "#dfc27d" }]}
+                  numberOfLines={1}
                 >
                   Home
                 </Text>
@@ -104,7 +113,10 @@ export default function BottomTabs() {
                 size={24}
                 color={focused ? "#ffcc66" : "white"}
               />
-              <Text style={[styles.label, focused && styles.activeLabel]} numberOfLines={1}>
+              <Text
+                style={[styles.label, focused && styles.activeLabel]}
+                numberOfLines={1}
+              >
                 Shop
               </Text>
             </View>
@@ -124,7 +136,10 @@ export default function BottomTabs() {
                 size={24}
                 color={focused ? "#ffcc66" : "white"}
               />
-              <Text style={[styles.label, focused && styles.activeLabel]} numberOfLines={1}>
+              <Text
+                style={[styles.label, focused && styles.activeLabel]}
+                numberOfLines={1}
+              >
                 Settings
               </Text>
             </View>
@@ -143,7 +158,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    paddingVertical: Platform.OS === "ios" ? 25 : 20,
+  },
+  tabBarDesktop: {
+    width: "60%",
+    alignSelf: "center",
+    paddingVertical: 60,
+    borderRadius: 16,
+    backgroundColor: "#0a2a58",
+    borderTopWidth: 0,
+    elevation: 10,
+    bottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+
+  tabBarTablet: {
+    width: "90%",
+    alignSelf: "center",
+    backgroundColor: "#0a2a58",
+    borderTopWidth: 0,
+    elevation: 10,
+    borderRadius: 16,
+    bottom: 10,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingVertical: 40,
   },
 
   tabItem: {
@@ -167,7 +208,6 @@ const styles = StyleSheet.create({
   centerWrapper: {
     justifyContent: "center",
     alignItems: "center",
-
   },
 
   homeCircle: {
@@ -177,9 +217,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom:4,    
-    backgroundColor:"#0a2a58",
-    padding:10
+    bottom: 4,
+    backgroundColor: "#0a2a58",
+    padding: 10,
   },
   homeCircleInner: {
     width: 70,
@@ -188,7 +228,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 4,
-    bottom:5,
+    bottom: 5,
     borderRadius: 100,
     borderColor: "#dfc27d",
   },
