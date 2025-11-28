@@ -14,12 +14,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import useResponsiveStyles from "../hooks/useResponsiveStyles";
 import MenuBar from "../components/MenuBar";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
 export default function GameUi() {
   const { isMobile, isTablet, isDesktop } = useResponsiveStyles();
   const [menuVisible, setMenuVisible] = React.useState(false);
+  const navigation = useNavigation();
 
   const handleShowMenu = () => {
     setMenuVisible(!menuVisible);
@@ -28,6 +30,10 @@ export default function GameUi() {
   const handleHideMenu = () => {
     setMenuVisible(false);
   };
+
+  const handleNavigate = () =>{
+    navigation.navigate("Tabs")
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#0A2040" }}>
@@ -50,7 +56,7 @@ export default function GameUi() {
         </TouchableOpacity>
       </View>
 
-      <MenuBar open={menuVisible} onPress={handleHideMenu} />
+      <MenuBar open={menuVisible} onPress={handleNavigate} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={[

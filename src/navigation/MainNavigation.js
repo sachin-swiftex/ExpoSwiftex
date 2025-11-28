@@ -6,7 +6,7 @@ const Stack = createStackNavigator();
 
 export default function MainNavigation() {
   return (
-    <Stack.Navigator initialRouteName="Tabs">
+    <Stack.Navigator initialRouteName="GameUi">
       <Stack.Screen
         name="Tabs"
         component={BottomTabs}
